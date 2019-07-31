@@ -1,0 +1,406 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+            # DOM manipulation
+            ## With vanilla javascript.
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ### ¿Qué es el DOM?
+            El modelo de objeto de documento (**DOM**) es una interfaz de programación para los documentos HTML y XML. Facilita una representación estructurada del documento y define de qué manera los programas pueden acceder, al fin de modificar, tanto su estructura, estilo y contenido. El DOM da una representación del documento como un grupo de nodos y objetos estructurados que tienen propiedades y métodos. Esencialmente, conecta las páginas web a scripts o lenguajes de programación.
+            Una página web es un documento. El modelo de objeto de documento (DOM) proporciona otras formas de presentar, guardar y manipular este mismo documento. El DOM es una representación completamente orientada al objeto de la página web y puede ser modificado con un lenguaje de script como JavaScript.
+            With vanilla javascript.
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ![arbol nodos](/assets/arbol-nodos.png)
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### Principales metodos manejo del DOM
+            ![eduardo manos tijeras](/assets/eduardo-manos-tijeras2.gif)
+
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### querySelector()
+            el metodo **querySelector** retorna el primer elemento que coincida con el selector CSS pasado como paramatro. Si no encuentra nada devuelve ***null***.
+            Antes de aparecerer querySelector en desarrollo se usaba mucho **getElementById** pero este metodo es mucho más rigido ya que no se debe dupicar id en el DOM en cambio clases css o etiquetas si.
+            Además de querySelector existe tambien el metodo **querySelectorAll** que nos devuelve una nodelist con los elementos del DOM que coincidan con la consulta.
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ```html
+            <p>paragraph one</p>
+            <p class="info">paragraph two</p>
+            <div>div one</div>
+            <p class="info">paragraph three</p>
+            <div>div two</div>
+            ```
+            ```js
+            var el = document.querySelector('p')
+            // return  <p>paragraph one</p>
+            var el2 = document.querySelector('.info')
+            // return  <p class="info">paragraph two</p>
+            var elements = document.querySelectorAll('p')
+            /*
+              return  NodeList(3)[
+                <p>paragraph one</p>,
+                <p class="info">paragraph two</p>,
+                <p class="info">paragraph three</p>
+              ]
+            */
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ```html
+            <p>paragraph one</p>
+            <p>paragraph two</p>
+            <div>div one</div>
+            <p>paragraph three</p>
+            <div>div two</div>
+            ```
+            ```js
+            var paragraphs = document.querySelectorAll('p')
+            for(var p of paragraphs) {
+              p.style.color = 'blue'
+            }
+            ```
+            ```html
+            <p style="color: blue;">paragraph one</p>
+            <p style="color: blue;">paragraph two</p>
+            <div>div one</div>
+            <p style="color: blue;">paragraph three</p>
+            <div>div two</div>
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### addEventListener()
+            Escuchar **eventos** de un elemento del **DOM** para ejecutar una función. La función asociada se ejecuta cuando el evento ocurre.
+            hay tres maneras de poder agregar listener a un elemento:
+            1. ```html
+                <button onclick=foo>Alert</button>
+              ```
+            2. ```js
+                var btn = document.querySelector('button')
+                btn.onclick=foo
+              ```
+            3. ```js
+                var btn = document.querySelector('button')
+                btn.addEventListener('click', foo)
+              ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            El metodo **addEventListener** admite varios parámetros
+            ```js
+              ele.addEventListener(event, function, [options])
+            ```
+            - **ele:** elemento HTML del DOM al que queremos agregar la eschucha.
+            - **event:** evento que queremos eschucar('click', 'mousedown', ...)
+            - **function:** funcion que se ejecuata cuando ocurre el evento.
+            - **options:** opciones extras pueden tener como valor true, false o un objeto con varias opciones.
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### Opciones addEventListener
+            | Opciones | |
+            --------- | -------------- |
+            **capture** | valores `false` `true` o `{capture: true}` , `{capture: false}` indica como vamos a capturar el evento si en el flujo del capture o en el del bubbling
+            **once** | indica que el evento se ejecutara una sola vez y luego dejara de ser escuchado. `{once: true}` por defecto el false
+            **passive**	 | activar o desactivar el modo pasivo `{passive: true}` por defecto es false
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ![capturing and bubbling](/assets/top-level-delegation.jpg)
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### removeEventListener ()
+            Eliminar la escucha de un  **evento** agregado con anterioridad con **addEventListener**.
+            Hay que usar la misma sintaxis que al agregarlo (con la unica excepción que no hace falta añadir la opcion de once si se uso en la creación).
+            ```js
+              btn.removeEventListener('click',foo)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### createElement()
+            El metodo **createElement** crea un elemento HTML usando el nombre de la etiqueta HTML como por ejemplo 'p' p 'div'.
+            Una vez creado tienes que usar alguno de los metodos que exiten para agregarlo al DOM, como por ejemplo **AppendChild**,para poder visualizar dicho elemento en pantalla.
+            ```js
+              var pEle = document.createElement('p')
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### appendChild()
+            El metodo **appendChild** añade el elemento pasado como parametro como último hijo del elemento que ejecuto el metodo.
+            El elemento pasado por parametro puede ser un nuevo elemento creado o uno ya existente. Si es un elemente ya existente se movera de lugar que ocupa en el momento de la llamada hasta el elemento que ejecuto el metodo appendChild.
+            ```js
+              var div = document.querySelector('div')
+              var strong = document.createElement('strong')
+              strong.textContent = 'Hello'
+              div.appendChild(strong)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### prepend()
+            El metodo **prepend** actua igul que el metodo appendChild pero en ved de insertar el elemento como último hijo lo hace como primer hijo del elemento que ejecuto la llamada al metodo.
+            ```js
+              var div = document.querySelector('div')
+              var strong = document.createElement('strong')
+              strong.textContent = 'Hello'
+              div.prepend(strong)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### insertBefore()
+            El metodo **insertBefore** agrega el elemento pasado como primer paramentro justo delante del elemento pasado como segundo parametro, el metodo es ejecutado desde el padre.
+            parentNode.insertBefore(newNode, referenceNode)
+            ```js
+              var div = document.querySelector('div')
+              var p =  div.querySelector('p')
+              var strong = document.createElement('strong')
+              strong.textContent = 'Hello'
+              div.insertBefore(strong, p)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### insertAdjacentElement(posicion, elemento)
+            El método **insertAdjacentElement** inserta un elemento nodo dado en una posición dada con respecto al elemento sobre el que se invoca.
+            ##### posicion
+            Un DOMString representando la posición relativa al elementoObjetivo; debe ser una de las siguientes cadenas:
+            - 'beforebegin': Antes del elemento.
+            - 'afterbegin': Dentro del elemento, antes de su primer hijo.
+            - 'beforeend': Dentro del elemento, después de su último hijo.
+            - 'afterend': Después del elemento.
+
+            ##### elemento
+              El elemento HTML a ser insertado.
+            ```js
+              var tempDiv = document.createElement('div')
+              tempDiv.style.backgroundColor = randomColor()
+              activeElem.insertAdjacentElement('afterend',tempDiv)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### removeChild()
+            El método **removeChild** elimina el elemento hijo pasado por parametro.
+
+            ```js
+              var div = document.querySelector('div')
+              var strong = div.querySelector('strong')
+              div.removeChild(strong)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### replaceChild()
+            El metodo **replaceChild** reemplaza el elemento pasado como segundo paramentro por el elemento pasado como primer parametro, el metodo es ejecutado desde el padre.
+            parentNode.replaceChild(newNode, oldChileEle)
+
+            ```js
+              var em = document.createElement('em')
+              var strong = document.querySelector('strong')
+              var div = document.querySelector('div')
+              em.textContent = 'hi'
+              div.replaceChild(em, strong)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### cloneNode()
+            El metodo **cloneNode** crea una copia de un elemnto ya existente.
+            ele.cloneNode([deep])
+            el paramentro deep es opcional si lo pasamas a true clona el elementos y sus hijos si es false(que es el valor por defecto) solo clona el elemento.
+            ```js
+            var strong = document.querySelector('strong')
+            var copy = strong.cloneNode(true)
+            var div = document.querySelector('div')
+            div.appendChild(copy)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ####  getComputedStyle()
+            El metodo **getComputedStyle** retorna objeto de solo lectura con todas las propiedades css qie tiene aplicadas el elemento.
+            var style = getComputedStyle(ele, [pseudoEle])
+            como paramentros tiene el elemento del que queremos consultar los estilos y opcionalmente podemos pasarle el pseudoElemento (por ejemplo ':after') para acceder a los estilos de este.
+            ```js
+              var style = getComputedStyle(document.querySelector('div'))
+              alert(style.width)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ####  setAttribute()
+            El metodo **setAttribute** añade un nuevo atributo al elemento HTML.
+            ele.setAttribute(name, value)
+            El primer parametro es el nombre del atributo que queremos setear y el segundo el valor que asignaremos
+            ```js
+              var div = document.querySelector('div')
+              div.setAttribute('contenteditable', true)
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### getAttribute()
+            El metodo **getAttribute** devuelve el valor de un atributo del elemento HTML.
+            ele.getAttribute(name)
+            Como parametro pasamos el nombre del atributo que queremos consultar
+            ```js
+              var div = document.querySelector('div')
+              alert(div.getAttribute('contenteditable'))
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### removeAttribute()
+            El metodo **removeAttribute** elimina un atributo del elemento HTML.
+            ele.removeAttribute(name)
+            Como parametro pasamos el nombre del atributo que queremos eliminar
+            ```js
+              var div = document.querySelector('div')
+              div.removeAttribute('contenteditable')
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### Element.classList
+            La propiedad de sólo lectura **Element.classList** devuelve una colección activa de DOMTokenList de los atributos de clase del elemento.
+            Usar classList es una forma práctica de acceder a la lista de clases de un elemento que como una cadena de texto delimitada por espacios a través de **element.className**.
+            ```js
+              var elementClasses = elementNodeReference.classList
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            #### Metodos
+            ##### add( String [, String] )
+              Añade las clases indicadas. Si estas clases existieran en el atributo del elemento serán ignoradas.
+            ##### remove( String [, String] )
+              Elimina las clases indicadas.
+              Nota: Eliminar una clase que no existe NO produce un error.
+            ##### item( Number )
+              Devuelve el valor de la clase por índice en la colección.
+            ##### toggle( String [, force] )
+              Cuando sólo hay un argumento presente: Alterna el valor de la clase; ej., si la clase existe la elimina y devuelve false, si no, la añade y devuelve true.
+              Cuando el segundo argumento está presente: Si el segundo argumento se evalúa como true, se añade la clase indicada, y si se evalúa como false, la elimina.
+          </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+              ##### contains( String )
+                Comprueba si la clase indicada existe en el atributo de clase del elemento.
+              ##### replace( oldClass, newClass )
+                Reemplaza una clase existente por una nueva.
+            </textarea>
+          </section>
+        <section data-markdown>
+          <textarea data-template>
+            ```js
+            // div es una referencia de objeto al elemento <div> con class="foo bar"
+            div.classList.remove("foo");
+            div.classList.add("anotherclass");
+            
+            // si visible está presente la elimina, de lo contrario la añade
+            div.classList.toggle("visible");
+            
+            // añadir/eliminar visible, dependiendo de la condición, i menor que 10
+            div.classList.toggle("visible", i < 10 );
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+              ```js
+              alert(div.classList.contains("foo"));
+              
+              // añadir o eliminar varias clases
+              div.classList.add("foo", "bar");
+              div.classList.remove("foo", "bar");
+              
+              // reemplazar la clase "foo" por "bar"
+              div.classList.replace("foo", "bar");
+              ```
+            </textarea>
+          </section>
+      </div>
+      
+    </div>
+
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true }
+        ]
+      });
+    </script>
+  </body>
+</html>
